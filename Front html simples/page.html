@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Colagem</title>
+</head>
+<body>
+<div class="Container">
+    <h1>Gerador de Colagem</h1>
+    <form class="gerador">
+        <label>Texto para a colagem</label> <br>
+        <input type="text" id="texto", placeholder="Gerador de colagem" required>
+        <input type="submit" value="Gerar">
+    </form>
+    <br>
+    <div class="imagem">
+        <img id="img">
+    </div>
+    <br>
+    <div class="status">
+        <span id="status">
+        Status:  Carregando<br>
+        Versão:   Carregando<br>
+        Imagens Geradas: Carregando<br>
+        </span>
+    </div>
+    <br>
+    <div id="log"> Log: </div>
+</div>
+
+<script src="main.js"></script>    
+</body>
+</html>
