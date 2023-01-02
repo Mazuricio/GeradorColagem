@@ -46,3 +46,11 @@ def criar_colagem(texto: Union[str, None] = None):
 @app.get('/status')
 def status():
     return Ler_dados()
+
+
+@app.delete('/manutencao')
+def limpar(senha: Union[str, None]= None):
+    ## provisorio para facilitar minha vida8
+    if senha == "minha12":
+        Apagar()
+        return {"apagar": "realizado"}

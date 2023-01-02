@@ -15,7 +15,7 @@ def ordenar(texto, lista):
     texto = texto.upper()
     for l in texto:
         for i in lista:
-            if l in i:
+            if l == i[8]:
                 ordem.append(i)
     return ordem
 
@@ -50,5 +50,7 @@ def criar(texto):
 
 if __name__ == '__main__':
     texto = str(input("Digite um texto: "))
+    #letras = ler_imagens('imagens')
+    #palavra = ordenar(texto, letras)
     arquivo = criar(texto) 
     print(f"Gerado {arquivo}")

@@ -8,7 +8,7 @@ function Get_status(){
             return response.json()})
         .then(data => {
             let status = document.getElementById("status")
-            let html =  "Status:" +  data.status + "<br> Code Status: " + code_status + "<br> Versão:" + data.version +"<br> Imagens Geradas: " + String(data.generatedImages) +"<br> "
+            let html =  "Status:" +  data.status + "<br> Code Status: " + code_status + "<br> Versão:" + data.version +"<br> Imagens Geradas: " + String(data.generatedImages) +"<br> " + "Imagens em cache: " + String(data.img_cache)
             status.innerHTML = html
         })
         .catch(err =>{
