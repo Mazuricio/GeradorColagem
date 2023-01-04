@@ -1,35 +1,42 @@
 from PIL import Image
 import os
 import unidecode
+import random, string
+def Nome(tipo):
+    ## gerador de nome aleatorio
+    letras = string.ascii_letters
+    nome = ''.join(random.choice(letras) for i in range(15)) + '.' + tipo
+    return 'geradas/' + nome
 
-def ler_imagens(pasta):
-    ## informa a pasta com a imagem e retorna uma lista com os nomes dos arquivos
+def Ordenar(texto):
+    # busca as imagens na pasta #
+    pasta = 'imagens'
     caminhos = [os.path.join(pasta, nome) for nome in os.listdir(pasta)]
     arquivos = [arq for arq in caminhos if os.path.isfile(arq)]
     imagens = [arq for arq in arquivos if arq.lower().endswith(".jpg") or arq.lower().endswith(".png")  or arq.lower().endswith(".jpeg")]
-    return imagens
-
-def ordenar(texto, lista):
-    ## pega uma palavra e retorna uma lista com os arquivos de cada letra
+    # -- #
+    # Busca os arquivos da letras e sorteia 1 dos arquivos #
+    # retornando assim uma lista com os arquivos. #
     ordem = []
     texto = texto.upper()
+    sorteio = []
     for l in texto:
-        for i in lista:
-            if l == i[8]:
-                ordem.append(i)
+        for i in imagens:
+            if l in i:
+                sorteio.append(i)
+        ordem.append(random.choice(sorteio))
+        sorteio = []
     return ordem
-
-
-def criar(texto):
+def Criar(texto):
+    ## cria imagem e retona o objeto imagem
     texto = unidecode.unidecode(texto) ## remove acentos
     # Utiliza as outras funções para realizar todo
     # Separa o texto em uma lista
-    letras = ler_imagens('imagens') # pegas as imagens
     separado = texto.split(' ') #separa as palavras
     maior = max(separado, key=len) #encontro a maior palavra
     lista = [] ## aqui é o processo de criar uma lista com a lista das imagens conforme as palavras
     for i in separado:
-        palavra = ordenar(i, letras)
+        palavra = Ordenar(i)
         lista.append(palavra)
     width = len(maior) * 70         # largura conforme a maior palavra
     height = 135 * len(separado)    # altura conforme a quantidade de palavras
@@ -43,14 +50,26 @@ def criar(texto):
             comeco += 70
         linha += 135
         comeco = 0
-    nome = 'geradas/' + separado[0] + '.png'  ## esse nome vai precisar ser mais aleatorio
-    fundo.save(nome) ## Salva o arquivo
-    return nome
+    return fundo
+class gerador:
+    def gif(quantas=5, texto='test'):
+        frames = []
+        conta = 0
+        while conta <= quantas:
+            frames.append(Criar(texto))
+            conta += 1
+        nome = Nome('gif')
+        frames[0].save(nome, save_all=True, append_images=frames[1:], optimize=True, duration=450, loop=0)
+        return nome
+    def png(texto):
+        img = Criar(texto)
+        nome = Nome('png')
+        img.save(nome, format='png')
+        return nome
 
 
 if __name__ == '__main__':
-    texto = str(input("Digite um texto: "))
-    #letras = ler_imagens('imagens')
-    #palavra = ordenar(texto, letras)
-    arquivo = criar(texto) 
-    print(f"Gerado {arquivo}")
+    texto = 'classe' #str(input("Digite um texto: "))
+    imagem = gerador.png(texto=texto)
+    gif = gerador.gif(5, texto) 
+    print(f'Geradas {imagem} e {gif}')

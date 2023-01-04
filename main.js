@@ -21,19 +21,26 @@ function Get_status(){
 var formulario = document.querySelector("form")
 formulario.addEventListener('submit', function(e){
     e.preventDefault()
-    var tipo = document.querySelector('input[name="tipo"]:checked').value // pega o tipo marcado
+    var gr = document.getElementsByClassName('imagem')
     let texto = document.getElementById("texto")
+    // gr.innerHTML = `<img src="${img_frente}"><img src="${img_costas}">`
     //url da pesquisa 
-    let urlForm = "http://127.0.0.1:8000/colagem?texto=" + texto.value + '&tipo=' + tipo
+    let urlForm = "http://127.0.0.1:8000/colagem?texto=" + texto.value
+    //log.innerText = urlForm
+    //let hello = "http://127.0.0.1:8000"
     // corrige caso tenha alguma letra maiscula
     urlForm = urlForm.toLocaleLowerCase()
     // Resposta HTML
+    //let html = ''
     fetch(urlForm)
         .then(resposta => resposta.blob()) //.json())
         .then(blob=>{
             //log.innerText = "Retorno: " + data
             var img = document.getElementById("img") //.setAttribute('src', img)
             img.src = window.URL.createObjectURL(blob)
+            //log.innerText += "\n " + 
+            console.log("foi")
+            //console.log(data)
             Get_status()
     })
     .catch(err =>{
@@ -42,6 +49,8 @@ formulario.addEventListener('submit', function(e){
             let mensagem = "A API está offline :("
             log.innerText = mensagem
         }
+        
+        //log.innerText += "\n " + hello
     })
     
 })

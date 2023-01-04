@@ -1,8 +1,8 @@
 from typing import Union
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
-from colagem import criar
+from fastapi.responses import FileResponse, HTMLResponse
+from colagem import gerador
 from manutencao.controle import *
 
 descricao = """Api para a geração de colagem apartir de um texto \n
@@ -28,18 +28,30 @@ app.add_middleware(
     allow_headers=['*'],
 )
 
-@app.get('/')
+@app.get('/', response_class=HTMLResponse)
 def home():
-    return {'Hello': "World"}
-
-## criar uma pagina de status
+    html = """<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Colagem API</title>
+</head>
+<body>
+<h1> API Gerador de Colagem <h1>
+<div>Para acessar a documentação acesse /docs</div>
+</body>
+</html>"""
+    return html
 
 @app.get('/colagem')
-def criar_colagem(texto: Union[str, None] = None):
-    #query_param_1 = str = Query(None, descriotion="Texto que será convertido em imagem")
-    imagem = criar(texto) ## no colagem, tem q ver se testar retornar o objeto img sem ser o arquivo, assim fica tudo na ram
-    ## se não funcionar dessa forma, tem q criar uma função que apague as imagens na pasta
-    ## ver o negocio do io que tinha se caso a primeira tentativa não funcionar
+def criar_colagem(texto: Union[str, None] = None, tipo: Union[str, None] = 'png'):
+    tipo = tipo.upper()
+    if tipo == 'PNG':
+        imagem = gerador.png(texto)
+    elif tipo == 'GIF':
+        imagem = gerador.gif(texto=texto)
     Somar() ## Controle de imagens geradas
     return FileResponse(imagem)
 
@@ -51,6 +63,6 @@ def status():
 @app.delete('/manutencao')
 def limpar(senha: Union[str, None]= None):
     ## provisorio para facilitar minha vida8
-    if senha == "minha12":
+    if senha == "senha":
         Apagar()
         return {"apagar": "realizado"}
